@@ -37,6 +37,6 @@ def test_disclaimer_script_socket_export(live_database, tmp_path):
         delattr(settings, 'vmail_db_' + suffix)
     with patch.object(sys, 'argv', ['dump_disclaimer.py', str(tmp_path)]):
         runpy.run_path(str(ROOT / 'tools/dump_disclaimer.py'), run_name='__main__')
-    assert (tmp_path / 'example.invalid.txt').read_text() == 'Socket export test'
-    assert (tmp_path / 'alias.invalid.txt').read_text() == 'Socket export test'
+    assert (tmp_path / 'example.invalid.txt').read_text() == '\n---------\nSocket export test\n'
+    assert (tmp_path / 'alias.invalid.txt').read_text() == '\n---------\nSocket export test\n'
     conn.ctx.db.close()
