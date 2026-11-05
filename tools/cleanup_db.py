@@ -35,13 +35,14 @@ sys.path.insert(0, rootdir)
 
 import web
 import settings
+from libs.sql_transport import describe_transport
 from tools.ira_tool_lib import debug, logger, sql_dbn, get_db_conn, sql_count_id
 
 web.config.debug = debug
 
 backend = settings.backend
 logger.info('Backend: %s' % backend)
-logger.info('SQL server: %s:%d' % (settings.iredadmin_db_host, int(settings.iredadmin_db_port)))
+logger.info('SQL endpoint: %s', describe_transport(settings, 'iredadmin', sql_dbn, host_suffix='host'))
 
 query_size_limit = 100
 

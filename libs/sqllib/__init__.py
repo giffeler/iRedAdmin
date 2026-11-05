@@ -2,6 +2,7 @@
 
 import web
 import settings
+from libs.sql_transport import web_transport
 
 from libs.logger import logger
 
@@ -16,12 +17,11 @@ class MYSQLWrap:
     def connect(self):
         conn = web.database(
             dbn='mysql',
-            host=settings.vmail_db_host,
-            port=int(settings.vmail_db_port),
             db=settings.vmail_db_name,
             user=settings.vmail_db_user,
             pw=settings.vmail_db_password,
-            charset='utf8')
+            charset='utf8',
+            **web_transport(settings, 'vmail', 'mysql', host_suffix='host'))
 
         conn.supports_multiple_insert = True
 

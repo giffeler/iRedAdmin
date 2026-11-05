@@ -111,3 +111,11 @@ mlmmjadmin_api_auth_token = ''
 # Place your custom settings below, you can override all settings in this file
 # and libs/default_settings.py here.
 #
+
+# Optional MySQL Unix sockets. See docs/unix-sockets.md.
+# Socket mode does not use TCP host/port or TCP TLS options.
+#vmail_db_socket = '/run/mysqld/mysqld.sock'
+#iredadmin_db_socket = '/run/mysqld/mysqld.sock'
+#amavisd_db_socket = '/run/mysqld/mysqld.sock'
+#iredapd_db_socket = '/run/mysqld/mysqld.sock'
+#fail2ban_db_socket = '/run/mysqld/mysqld.sock'

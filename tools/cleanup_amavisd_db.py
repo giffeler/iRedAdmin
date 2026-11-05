@@ -39,6 +39,7 @@ sys.path.insert(0, rootdir)
 
 import web
 import settings
+from libs.sql_transport import describe_transport
 from libs import iredutils
 from tools import ira_tool_lib
 
@@ -50,7 +51,7 @@ if not (settings.amavisd_enable_logging or settings.amavisd_enable_quarantine):
 
 backend = settings.backend
 logger.info('Backend: %s' % backend)
-logger.info('SQL server: %s:%d' % (settings.amavisd_db_host, int(settings.amavisd_db_port)))
+logger.info('SQL endpoint: %s', describe_transport(settings, 'amavisd', ira_tool_lib.sql_dbn, host_suffix='host'))
 
 db_settings = iredutils.get_settings_from_db(params=['amavisd_remove_quarantined_in_days', 'amavisd_remove_maillog_in_days'])
 keep_quar_days = db_settings['amavisd_remove_quarantined_in_days']

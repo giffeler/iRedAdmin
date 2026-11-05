@@ -45,6 +45,7 @@ web.config.debug = False
 
 import settings
 from libs import iredutils
+from libs.sql_transport import describe_transport
 from tools import ira_tool_lib
 logger = ira_tool_lib.logger
 
@@ -142,16 +143,12 @@ def dump_from_ldap():
 
 def dump_from_sql():
     """Dump disclaimer text from MySQL or PostgreSQL server."""
-    logger.info("Connecting to SQL server '%s:%d' as user '%s' ..." % (settings.vmail_db_host,
-                                                                       int(settings.vmail_db_port),
-                                                                       settings.vmail_db_user))
-
-    conn = web.database(dbn=sql_dbn,
-                        host=settings.vmail_db_host,
-                        port=int(settings.vmail_db_port),
-                        db=settings.vmail_db_name,
-                        user=settings.vmail_db_user,
-                        pw=settings.vmail_db_password)
+    logger.info("Connecting to SQL endpoint '%s' as user '%s' ...",
+                describe_transport(settings, 'vmail', sql_dbn, host_suffix='host'),
+                settings.vmail_db_user)
+    conn = ira_tool_lib.get_db_conn('vmail')
+    if conn is None:
+        raise RuntimeError('Cannot connect to the vmail database for disclaimer export')
 
     logger.info('Get all alias domains')
     qr = conn.select('alias_domain', what='alias_domain, target_domain')

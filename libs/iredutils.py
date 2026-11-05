@@ -18,6 +18,7 @@ import web
 
 import settings
 from libs import regxes, l10n
+from libs.sql_transport import web_transport
 
 # Priority used in SQL table `amavisd.mailaddr` and iRedAPD plugin `throttle`.
 # 0 is the lowest priority.
@@ -1212,8 +1213,7 @@ def is_allowed_global_admin_login_ip(client_ip) -> bool:
 
 def get_db_conn(db_name, sql_dbn):
     try:
-        host = settings.__dict__[db_name + '_db_host']
-        port = int(settings.__dict__[db_name + '_db_port'])
+        transport = web_transport(settings, db_name, sql_dbn, host_suffix='host')
         db = settings.__dict__[db_name + '_db_name']
         user = settings.__dict__[db_name + '_db_user']
         pw = settings.__dict__[db_name + '_db_password']
@@ -1221,25 +1221,26 @@ def get_db_conn(db_name, sql_dbn):
         if sql_dbn == 'postgres':
             conn = web.database(
                 dbn=sql_dbn,
-                host=host,
-                port=port,
                 db=db,
                 user=user,
                 pw=pw,
+                **transport,
             )
         else:
             # sql_dbn == 'mysql'
             conn = web.database(
                 dbn=sql_dbn,
-                host=host,
-                port=port,
                 db=db,
                 user=user,
                 pw=pw,
+                **transport,
                 charset='utf8',
             )
 
         conn.supports_multiple_insert = True
         return conn
-    except:
+    except Exception as e:
+        # Import here to avoid the logger/iredutils import cycle.
+        from libs.logger import logger
+        logger.error("SQL connection failed: %s", e)
         return None

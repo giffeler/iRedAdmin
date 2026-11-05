@@ -695,3 +695,10 @@ NOTIFICATION_URL_SELF_SERVICE = ""
 # Subject of notification email. Available placeholders:
 #   - %(total)d -- number of quarantined mails in total
 NOTIFICATION_QUARANTINE_MAIL_SUBJECT = "[Attention] You have %(total)d emails quarantined and not delivered to mailbox"
+
+# Optional MySQL Unix sockets. Empty values preserve TCP behavior.
+vmail_db_socket = ''
+iredadmin_db_socket = ''
+amavisd_db_socket = ''
+iredapd_db_socket = ''
+fail2ban_db_socket = ''

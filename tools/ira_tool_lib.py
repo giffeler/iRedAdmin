@@ -17,6 +17,7 @@ web.config.debug = debug
 
 import settings
 from libs import iredutils
+from libs.sql_transport import web_transport
 
 backend = settings.backend
 if backend in ['ldap', 'mysql']:
@@ -48,11 +49,10 @@ conn = _wrap.conn\n""")
     try:
         conn = web.database(
             dbn=sql_dbn,
-            host=settings.__dict__[db_name + '_db_host'],
-            port=int(settings.__dict__[db_name + '_db_port']),
             db=settings.__dict__[db_name + '_db_name'],
             user=settings.__dict__[db_name + '_db_user'],
             pw=settings.__dict__[db_name + '_db_password'],
+            **web_transport(settings, db_name, sql_dbn, host_suffix='host'),
         )
 
         conn.supports_multiple_insert = True
