@@ -32,5 +32,5 @@ jobs:
         env:
           SOCKET_TEST_IMAGE: ${{ matrix.mariadb != 'distribution' && format('mariadb:{0}', matrix.mariadb) || '' }}
           SOCKET_TEST_PYTHON: /tmp/mail-socket-venv/bin/python
-          SOCKET_TEST_USER: www-data
+          SOCKET_TEST_USER: iredadmin
         run: bash downstream_tests/run-mariadb.sh
